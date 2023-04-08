@@ -4,6 +4,7 @@ import com.Procesos_Vehiculos.API.models.Car;
 import com.Procesos_Vehiculos.API.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -11,16 +12,20 @@ import java.util.List;
 public class CarServicesImp implements CarService {
     @Autowired
     private CarRepository carRepository;
+    @Autowired
+    private RestTemplate restTemplate;
 
-    public Car getCar(Long id){return carRepository.findById(id).get();}
+    public Car getCar(Long id){
+        String url = "https://myfakeapi.com/api/cars/"+id;
+        Car car = restTemplate.getForObject(url, Car.class);
+        return car;
+//        return carRepository.findById(id).get();
+    }
         @Override
-        public Boolean createCar(Car car){
-        try{
-            carRepository.save(car);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
+        public Car createCar(Long id ){
+            String url = "https://myfakeapi.com/api/cars/"+id;
+            Car car = restTemplate.getForObject(url, Car.class);
+                return carRepository.save(car);
         }
         @Override
     public List<Car>allCars(){return carRepository.findAll();}
@@ -30,12 +35,11 @@ public class CarServicesImp implements CarService {
         try{
             Car carBD = carRepository.findById(id).get();
 
-            carBD.setCarBrand(car.getCarBrand());
-            carBD.setColor(car.getColor());
-            carBD.setState(car.getState());
+            carBD.setCar(car.getCar());
+            carBD.setCar_color(car.getCar_color());
             carBD.setPrice(car.getPrice());
-            carBD.setYear(car.getYear());
-            carBD.setModel(car.getModel());
+            carBD.setCar_model_year(car.getCar_model_year());
+            carBD.setCar_model(car.getCar_model());
             Car carUp = carRepository.save(carBD);
             return true;
         }catch (Exception e){
