@@ -6,7 +6,11 @@ import java.util.List;
 
 public interface CarService {
     Car getCar(Long id);
+<<<<<<< HEAD
     Boolean createCar(Car car);
+=======
+    Car createCar(Long id);
+>>>>>>> develop/yindry/parcial1
     List<Car>allCars();
     Boolean updateCar(Long id, Car car);
 }
