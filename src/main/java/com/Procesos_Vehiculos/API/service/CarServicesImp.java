@@ -4,7 +4,7 @@ import com.Procesos_Vehiculos.API.models.Car;
 import com.Procesos_Vehiculos.API.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
+
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class CarServicesImp implements CarService {
         }catch (Exception e){
             return false;
         }
-=======
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -103,7 +103,7 @@ public class CarServicesImp implements CarService {
         carRepository.save(carBD);
 
         return true;
->>>>>>> develop/yindry/parcial1
+
     }
 }
 
