@@ -1,7 +1,7 @@
 package com.Procesos_Vehiculos.API.controller;
 
 import com.Procesos_Vehiculos.API.models.User;
-import com.Procesos_Vehiculos.API.service.UserService;
+import com.Procesos_Vehiculos.API.service.AuthService;
 import com.Procesos_Vehiculos.API.utils.ApiResponse;
 import com.Procesos_Vehiculos.API.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
     private ApiResponse apiResponse;
     Map data = new HashMap<>();
 
@@ -28,7 +28,7 @@ public class AuthController {
     public ResponseEntity login(@RequestBody User user){
 
         try{
-            data.put("token",userService.login(user));
+            data.put("token",authService.login(user));
             apiResponse = new ApiResponse(Constants.USER_LOGIN, data);
             return new ResponseEntity(apiResponse, HttpStatus.OK);
         }catch (Exception e){
