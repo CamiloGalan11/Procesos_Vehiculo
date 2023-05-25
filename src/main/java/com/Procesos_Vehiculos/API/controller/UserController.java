@@ -4,21 +4,22 @@ import com.Procesos_Vehiculos.API.models.User;
 import com.Procesos_Vehiculos.API.service.UserService;
 import com.Procesos_Vehiculos.API.utils.ApiResponse;
 import com.Procesos_Vehiculos.API.utils.Constants;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@RestController
+@RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
     private ApiResponse apiResponse;
     Map data = new HashMap<>();
 
