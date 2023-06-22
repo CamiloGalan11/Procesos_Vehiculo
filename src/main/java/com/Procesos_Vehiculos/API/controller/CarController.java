@@ -2,7 +2,14 @@ package com.Procesos_Vehiculos.API.controller;
 
 import com.Procesos_Vehiculos.API.models.Car;
 import com.Procesos_Vehiculos.API.models.CarObject;
+import com.Procesos_Vehiculos.API.models.User;
 import com.Procesos_Vehiculos.API.service.CarService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +19,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@SecurityRequirement(name = "jwt")
 public class CarController {
     @Autowired
     private CarService carService;
-
+    @Operation(summary = "Get a car",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Car returned",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))),
+                    @ApiResponse(responseCode = "404", description = "Car not found with provider id",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping(value = "/car/{id}")
     public ResponseEntity findCarById(@PathVariable Long id){
         Map response = new HashMap();
@@ -27,6 +42,14 @@ public class CarController {
             return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }
     }
+    @Operation(summary = "Add a new car",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Car created",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Car already exists",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping(value = "/car/{id}")
     public ResponseEntity saveCar(@PathVariable Long id){
         Map response = new HashMap();
@@ -40,6 +63,14 @@ public class CarController {
         response.put("Message","ERROR AL INGRESAR EL VEHICULO");
         return  new ResponseEntity(response,HttpStatus.BAD_REQUEST);
     }
+    @Operation(summary = "Get all cars",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "All cars returned",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = User.class)))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping(value = "/cars")
     public ResponseEntity findCarsByAll(){
         Map response = new HashMap();
@@ -51,6 +82,14 @@ public class CarController {
             return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }
     }
+    @Operation(summary = "Update a car",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Car update",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
     @PutMapping(value = "/car/{id}")
     public ResponseEntity updateCar(@PathVariable Long id, @RequestBody Car car){
         Map<String, String> response = new HashMap<>();
@@ -62,18 +101,5 @@ public class CarController {
         response.put("Status","201");
         response.put("Message","VEHICULO ACTUALIZADO");
         return new ResponseEntity(response, HttpStatus.OK);
-    }
-    @GetMapping("/test/{id}")
-    public Car getCar(@PathVariable Long id){
-        String url = "https://myfakeapi.com/api/cars/"+id;
-        CarObject[] carObject = restTemplate.getForObject(url, CarObject[].class);
-        Car car = new Car();
-        car.setId(carObject[0].getCar().getId());
-        car.setCar_color(carObject[0].getCar().getCar_color());
-        car.setCar_model(carObject[0].getCar().getCar_model());
-        car.setCar_vin(carObject[0].getCar().getCar_vin());
-        car.setCar(carObject[0].getCar().getCar());
-        return car;
-//        return carRepository.findById(id).get();
     }
 }

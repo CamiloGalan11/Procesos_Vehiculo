@@ -2,7 +2,7 @@ package com.Procesos_Vehiculos.API.controller;
 
 import com.Procesos_Vehiculos.API.models.User;
 import com.Procesos_Vehiculos.API.service.AuthService;
-import com.Procesos_Vehiculos.API.utils.ApiResponse;
+import com.Procesos_Vehiculos.API.utils.ResponseApi;
 import com.Procesos_Vehiculos.API.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-    private ApiResponse apiResponse;
+    private ResponseApi responseApi;
     Map data = new HashMap<>();
 
     @PostMapping(value = "/login")
@@ -29,11 +29,11 @@ public class AuthController {
 
         try{
             data.put("token",authService.login(user));
-            apiResponse = new ApiResponse(Constants.USER_LOGIN, data);
-            return new ResponseEntity(apiResponse, HttpStatus.OK);
+            responseApi = new ResponseApi(Constants.USER_LOGIN, data);
+            return new ResponseEntity(responseApi, HttpStatus.OK);
         }catch (Exception e){
-            apiResponse = new ApiResponse(e.getMessage(), "");
-            return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
+            responseApi = new ResponseApi(e.getMessage(), "");
+            return new ResponseEntity<>(responseApi,HttpStatus.NOT_FOUND);
         }
     }
 }
