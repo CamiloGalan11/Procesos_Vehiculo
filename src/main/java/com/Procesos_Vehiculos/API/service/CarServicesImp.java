@@ -3,6 +3,7 @@ package com.Procesos_Vehiculos.API.service;
 import com.Procesos_Vehiculos.API.models.Car;
 import com.Procesos_Vehiculos.API.models.User;
 import com.Procesos_Vehiculos.API.repository.CarRepository;
+import com.Procesos_Vehiculos.API.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +14,8 @@ import java.util.Map;
 
 @Service
 public class CarServicesImp implements CarService {
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private CarRepository carRepository;
     @Autowired
@@ -25,7 +28,10 @@ public class CarServicesImp implements CarService {
 //        return carRepository.findById(id).get();
     }
         @Override
-        public Car createCar(Long id ) {
+        public Car createCar(Long id, Long userId) {
+        if (!userRepository.existsById(userId)){
+            throw new RuntimeException("Usuario no encontrado por ID");
+        }
             String url = "https://myfakeapi.com/api/cars/"+id;
             //Extraer de la api la data que viene mapeada
             Map<String, Map<String, Object>> map = restTemplate.getForObject(url, HashMap.class);
@@ -41,10 +47,11 @@ public class CarServicesImp implements CarService {
             car.setPrice((String) obj.get("price"));
             car.setReference((String) obj.get("car_vin"));
             car.setAvailability((Boolean) obj.get("availability"));
-            car.setUserId(new User(1L));
+            car.setUserId(new User(userId));
 
             return carRepository.save(car);
         }
+
         @Override
     public List<Car>allCars(){return carRepository.findAll();}
 

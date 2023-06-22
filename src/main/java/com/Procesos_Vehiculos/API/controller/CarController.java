@@ -51,9 +51,9 @@ public class CarController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping(value = "/car/{id}")
-    public ResponseEntity saveCar(@PathVariable Long id){
+    public ResponseEntity saveCar(@PathVariable Long id, @RequestParam Long userId){
         Map response = new HashMap();
-        Car carResp = carService.createCar(id);
+        Car carResp = carService.createCar(id, userId);
         if (carResp != null){
             response.put("Status","201");
             response.put("Message","SE HA INGRESADO EL VEHICULO");
