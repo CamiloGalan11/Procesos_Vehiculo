@@ -20,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @SecurityRequirement(name = "jwt")
+@CrossOrigin(origins = "*")
 public class CarController {
     @Autowired
     private CarService carService;

@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.Procesos_Vehiculos.API.utils.Constants.REGISTER_DATA_ERROR;
+import static com.Procesos_Vehiculos.API.utils.Constants.REGISTER_UPDATE;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "jwt")
+@CrossOrigin(origins = "*")
 public class UserController {
 
 
@@ -83,5 +87,14 @@ public class UserController {
             responseApi = new ResponseApi(Constants.REGISTER_NOT_FOUND,"");
             return new ResponseEntity<>(responseApi,HttpStatus.NOT_FOUND);
         }
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody User user) {
+        if (!userService.updateUser(id, user)) {
+            responseApi = new ResponseApi(REGISTER_DATA_ERROR, "");
+            return new ResponseEntity<>(responseApi, HttpStatus.PAYMENT_REQUIRED);
+        }
+        responseApi = new ResponseApi(REGISTER_UPDATE, "");
+        return new ResponseEntity<>(responseApi, HttpStatus.OK);
     }
 }
