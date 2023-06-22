@@ -1,12 +1,16 @@
 package com.Procesos_Vehiculos.API.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +27,9 @@ public class User {
     private String password;
     @Column(length = 30)
     private Date birthday;
+    public User(Long id){
+        this.id = id;
+    }
 }
 
 

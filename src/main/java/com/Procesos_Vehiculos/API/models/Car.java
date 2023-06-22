@@ -9,15 +9,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "CAR")
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String car;
-    private String car_model;
-    private String car_color;
-    private Double price;
-    private int car_model_year;
-    private String car_vin;
-    private String availability;
+    private String type;
+    private String model;
+    private String color;
+    private String price;
+    private int year;
+    private String reference;
+    private boolean availability;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User userId;
 }
